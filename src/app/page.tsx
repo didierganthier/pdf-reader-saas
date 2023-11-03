@@ -1,8 +1,12 @@
 import { Button } from '@/components/ui/button'
-import { UserButton } from '@clerk/nextjs'
+import { UserButton, auth } from '@clerk/nextjs'
 import Image from 'next/image'
+import Link from 'next/link';
 
-export default function Home() {
+export default async function Home() {
+  const { userId } = await auth();
+  const isAuth = !!userId;
+
   return (
     <div className='w-screen min-h-screen bg-gradient-to-r from-rose-100 to-teal-100'>
       <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'>
@@ -12,7 +16,20 @@ export default function Home() {
             <UserButton afterSignOutUrl='/' />
           </div>
           <div className='flex mt-2'>
-            <Button>Got to Chats</Button>
+            {isAuth && <Button>Got to Chats</Button>}
+          </div>
+          <p className='max-w-xl mt-1 text-lg text-slate-600'>
+            Join millions of students, researchers, and professionals to instantly
+            answer questions and understand research with AI.
+          </p>
+          <div className='w-full mt-4'>
+            {isAuth ? (<h1>fileupload</h1>) : (
+              <Link href='/sign-in'>
+              <Button>
+                Login to get Started!
+              </Button>
+            </Link>
+            )}
           </div>
         </div>
       </div>
